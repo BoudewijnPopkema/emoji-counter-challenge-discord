@@ -51,7 +51,7 @@ public class ReaderGUI extends JFrame {
         // Add tab 1 to the tabbed pane
         tabbedPane.addTab("Input & Output", tab1Panel);
 
-        // Tab 2: Empty Panel (You can customize it as needed)
+        // Tab 2: Generation panel
         JPanel generationPane = new JPanel();
         generationPane.add(new JLabel("Here will be some buttons to generate en"));
         tabbedPane.addTab("Generate new Challenge", generationPane);
