@@ -17,29 +17,52 @@ public class ReaderGUI extends JFrame {
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        
+
+        // Create the tabbed pane
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        // Tab 1: Original Input Form
+        JPanel tab1Panel = new JPanel(new BorderLayout());
+
         // Panel for input fields
         JPanel inputPanel = new JPanel(new GridLayout(3, 2));
-        
+
         inputPanel.add(new JLabel("Folder Location:"));
         folderLocationField = new JTextField(30);
         inputPanel.add(folderLocationField);
-        
+
         inputPanel.add(new JLabel("Amount of Weeks:"));
         amountOfWeeksField = new JTextField(5);
         inputPanel.add(amountOfWeeksField);
-        
+
         JButton processButton = new JButton("Process Files");
         processButton.addActionListener(new ProcessButtonListener());
         inputPanel.add(processButton);
-        
+
         // Output area
         outputArea = new JTextArea(10, 40);
         outputArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(outputArea);
+
+        // Add input panel and output area to tab 1
+        tab1Panel.add(inputPanel, BorderLayout.NORTH);
+        tab1Panel.add(scrollPane, BorderLayout.CENTER);
+
+        // Add tab 1 to the tabbed pane
+        tabbedPane.addTab("Input & Output", tab1Panel);
+
+        // Tab 2: Empty Panel (You can customize it as needed)
+        JPanel generationPane = new JPanel();
+        generationPane.add(new JLabel("Here will be some buttons to generate en"));
+        tabbedPane.addTab("Generate new Challenge", generationPane);
         
-        add(inputPanel, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
+        // Tab3: Explanation
+        JPanel infoPanel = new JPanel();
+        infoPanel.add(new JLabel("Here will be information later."));
+        tabbedPane.addTab("Information", infoPanel);
+
+        // Add the tabbed pane to the main frame
+        getContentPane().add(tabbedPane, BorderLayout.CENTER);
     }
 
     private class ProcessButtonListener implements ActionListener {
