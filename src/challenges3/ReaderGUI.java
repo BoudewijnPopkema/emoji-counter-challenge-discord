@@ -83,6 +83,7 @@ public class ReaderGUI extends JFrame {
             new Process(getBufReader(folderLocation + "promise.txt"),
                         getBufReader(folderLocation + "done.txt"),
                         getBufReader(folderLocation + "bonus.txt"),
+                        getBufReader(folderLocation + "reward.txt"),
                         br_week_list,
                         outputArea);
         } catch (FileNotFoundException e) {

@@ -20,6 +20,7 @@ public class Persoon implements Comparable<Persoon> {
 	private boolean pannenkoekenbord = true;
 	private int vakantieweek = 0;
 	private int promise = 0;
+	private ArrayList<Emoji> emojis = new ArrayList<>();
 
 	private void printData() {
 		System.out.println(" naam = " + naam);
@@ -29,6 +30,15 @@ public class Persoon implements Comparable<Persoon> {
 		System.out.println(" week = " + week);
 		System.out.println(" huidige_week = " + huidige_week);
 		System.out.println(" percentage = " + percentage);
+	}
+
+	public Persoon(String huidigPersoon, int doel, int week, int vakantieweek, ArrayList<Emoji> emojis) {
+		naam = huidigPersoon;
+		this.doel = doel;
+		this.week = week;
+		this.vakantieweek = vakantieweek;
+		this.emojis = emojis;
+		System.out.println(" Persoon aangemaakt: naam= " + huidigPersoon + " doel= " + doel + " week= " + week);
 	}
 
 	public Persoon(String huidigPersoon, int doel, int week, int vakantieweek) {
@@ -153,11 +163,16 @@ public class Persoon implements Comparable<Persoon> {
 	private String getPromiseGehaald() {
 		if (doelen.size() > 1 && doelen.get(doelen.size() - 2) > 0
 				&& scores.get(scores.size() - 1) >= doelen.get(doelen.size() - 2)) {
-			String[] promiseSuccessEmojis = { "🦑", "🐚", "🪸", "🦞" };
-
-			int index = new Random().nextInt(promiseSuccessEmojis.length);
-
-			return promiseSuccessEmojis[index];
+			ArrayList<String> promiseSuccessEmojis = new ArrayList<>();
+			for (Emoji emoji : emojis) {
+				if (emoji.getType() == EmojiType.REWARD) {
+					promiseSuccessEmojis.add(emoji.getChar());
+				}
+			}
+			if (!promiseSuccessEmojis.isEmpty()) {
+				int index = new Random().nextInt(promiseSuccessEmojis.size());
+				return promiseSuccessEmojis.get(index);
+			}
 		}
 		return "";
 	}
@@ -169,6 +184,8 @@ public class Persoon implements Comparable<Persoon> {
 			score = score + emoji.getPoints() * aantal;
 		} else if (emoji.getType() == EmojiType.PROMISE) {
 			doel = doel + emoji.getPoints() * aantal;
+		} else if (emoji.getType() == EmojiType.REWARD) {
+			// Rewards worden niet opgeteld, alleen weergegeven.
 		} else {
 			System.out.println(" Deze emoji had geen goed type!");
 		}

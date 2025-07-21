@@ -19,7 +19,7 @@ public class reader {
 	static String LocatiePromise = folderLocation+"promise.txt"; // txt file met de emoji's die geteld moeten worden met hun punten en commando
 	static String LocatieDone = folderLocation+"done.txt"; // txt file met de emoji's die geteld moeten worden met hun punten en commando
 	static String LocatieBonus = folderLocation+"bonus.txt"; // txt file met de bonus emoji's die geteld moeten worden met hun punten
-	
+	static String LocatieReward = folderLocation+"reward.txt"; // txt file met de reward emoji's
 	
 	
 	private static BufferedReader getBufReader(String fileLocation) throws FileNotFoundException {
@@ -44,7 +44,7 @@ public class reader {
 		
 		// Run the full process to generate results
 		try {
-			new Process(getBufReader(LocatiePromise), getBufReader(LocatieDone), getBufReader(LocatieBonus), br_week_list);
+			new Process(getBufReader(LocatiePromise), getBufReader(LocatieDone), getBufReader(LocatieBonus), getBufReader(LocatieReward), br_week_list);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

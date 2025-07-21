@@ -18,16 +18,18 @@ public class Process {
 	public enum EmojiType {
 		BONUS,
 		DONE,
-		PROMISE
+		PROMISE,
+		REWARD
 	}
 	
 	
 
 	// voor gebruik met de GUI
-	public Process(BufferedReader brEmojiPromise, BufferedReader brEmojiDone, BufferedReader br_emoji_bonus, ArrayList<BufferedReader> br_Week, JTextArea outputArea) throws IOException {
+	public Process(BufferedReader brEmojiPromise, BufferedReader brEmojiDone, BufferedReader br_emoji_bonus, BufferedReader br_emoji_reward, ArrayList<BufferedReader> br_Week, JTextArea outputArea) throws IOException {
 		maakEmojis(brEmojiDone, EmojiType.DONE);
 		maakEmojis(brEmojiPromise, EmojiType.PROMISE);
 		maakEmojis(br_emoji_bonus, EmojiType.BONUS);
+		maakEmojis(br_emoji_reward, EmojiType.REWARD);
 		//maakPersonen(br_bepaling);
 		String results = verwerk(br_Week);
 		//printInstellingen();
@@ -36,10 +38,11 @@ public class Process {
 	}
 	
 	// voor gebruik met de reader
-	public Process(BufferedReader brEmojiPromise, BufferedReader brEmojiDone, BufferedReader br_emoji_bonus, ArrayList<BufferedReader> br_Week) throws IOException {
+	public Process(BufferedReader brEmojiPromise, BufferedReader brEmojiDone, BufferedReader br_emoji_bonus, BufferedReader br_emoji_reward, ArrayList<BufferedReader> br_Week) throws IOException {
 		maakEmojis(brEmojiDone, EmojiType.DONE);
 		maakEmojis(brEmojiPromise, EmojiType.PROMISE);
 		maakEmojis(br_emoji_bonus, EmojiType.BONUS);
+		maakEmojis(br_emoji_reward, EmojiType.REWARD);
 		//maakPersonen(br_bepaling);
 		String results = verwerk(br_Week);
 		//printInstellingen();
@@ -77,7 +80,7 @@ public class Process {
 			vakantieweek = 0;
 		}
 		System.out.println("naam = " + naam + "   aantal "+ aantal + "week " + week);
-		Persoon persoon = new Persoon(naam, aantal, week, vakantieweek);
+		Persoon persoon = new Persoon(naam, aantal, week, vakantieweek, emojis);
 		personen.add(persoon);
 	}
 
@@ -146,11 +149,13 @@ public class Process {
 
 	private void addPoints(String ss) {
 		for (Emoji emoji: emojis) {
-			int aantal = countOccurences(ss, emoji.getChar());
-			if (aantal > 0) {
-				getPersoon().add(emoji, aantal);
-				// Deze kan het detecten van emoji's troubleshooten
-				//System.out.println(getPersoon().getNaam()+" heeft " + aantal + " van emoji " + emoji.getChar() +" gehaald");
+			if (emoji.getType() != EmojiType.REWARD) {
+				int aantal = countOccurences(ss, emoji.getChar());
+				if (aantal > 0) {
+					getPersoon().add(emoji, aantal);
+					// Deze kan het detecten van emoji's troubleshooten
+					//System.out.println(getPersoon().getNaam()+" heeft " + aantal + " van emoji " + emoji.getChar() +" gehaald");
+				}
 			}
 		}
 	}
@@ -170,7 +175,7 @@ public class Process {
 			}
 		}
 		System.out.println("Error!");
-		Persoon p = new Persoon(huidigPersoon, 0, 0, 0);
+		Persoon p = new Persoon(huidigPersoon, 0, 0, 0, emojis);
 		personen.add(p);
 		return p;
 	}
