@@ -33,7 +33,7 @@ public class Process {
 		//maakPersonen(br_bepaling);
 		String results = verwerk(br_Week);
 		//printInstellingen();
-		System.out.println(results);
+		outputArea.setText(results);
 
 	}
 	
@@ -109,7 +109,6 @@ public class Process {
 		String result = "";
 		int weeknumber = 0;
 		for (BufferedReader br_week:br) {
-			result = "";
 			String onelineAgo = "";
 			String twolinesAgo = "";
 			while ((ss=br_week.readLine()) != null) {
@@ -124,7 +123,7 @@ public class Process {
 			}
 			Collections.sort(personen);
 			System.out.println(" score-bord: ");
-			result = result + "## Scorebord week " + weeknumber;
+			result = result + "\n\n## Scorebord week " + weeknumber;
 			int num = 1;
 			for (Persoon p : personen) {
 				result = result + p.getPoms(num);

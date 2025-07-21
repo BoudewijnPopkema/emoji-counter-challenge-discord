@@ -87,50 +87,84 @@ public class Persoon implements Comparable<Persoon> {
 	}
 
 	public String getPoms(int num) {
-
 		if (naam.equals("")) {
 			return null;
 		}
-		int puntentotaal = getTotaleScore();
-		int bonustotaal = getBonussenOpgeteld();
-		int bonusdezeweek = bonussen.get(bonussen.size() - 1);
-		int bonusvoorheen = bonustotaal - bonusdezeweek;
-		int basistotaal = getScoresOpgeteld();
-		int basisdezeweek = (int) Math.round(scores.get(scores.size() - 1));
-		int basisvoorheen = (int) (basistotaal - basisdezeweek);
-		String basisemoji = ":fish:";
-		int inzet = doelen.get(doelen.size() - 1);
-		String bonusemoji = ":one:";
-		if (doelen.size() > 0) {
-			if (puntentotaal == 0 && inzet == 0) {
-				return "";
-			}
-			// nieuwe format: <bonusemoji> <puntentotaal> <Naam> (<basispunten
-			// hiervoor>+basispunten deze week>)=totaal basispunten <emoji> & (0 + 17)=17
-			// bonuspunten inzet: 20 :1pomodorog:
-			System.out.println("#. " + getPromiseGehaald() + naam + get_spaces(naam, getPromiseGehaald()) + "("
-					+ (getScoresOpgeteld()) + "+" + getBonussenOpgeteld() + "=)" + getTotaleScore() + ":fish:"
-					+ " inzet volgende week: " + doelen.get(doelen.size() - 1) + ":1pomodorog:");
-			return "\n" + num + ". " + getPromiseGehaald() + " **" + puntentotaal + "** " + naam
-					+ get_spaces(naam, getPromiseGehaald()) + "(" + basisvoorheen + "+" + basisdezeweek + ") = **"
-					+ basistotaal + "** " + basisemoji + " & (" + bonusvoorheen + "+" + bonusdezeweek + ") = **"
-					+ bonustotaal + "** " + bonusemoji + "      Inzet: " + inzet;
-			// return "\n" + num + ". " + getPromiseGehaald() + checkForChars(naam) +
-			// get_spaces(naam, "")+"(" + getScoresOpgeteld() +"+"+ getBonussenOpgeteld()
-			// +"=)"+getTotaleScore()+":sunny:" + " inzet volgende week: " +
-			// doelen.get(doelen.size()-1)+":1pomodorog:";
-		} else {
-			if (puntentotaal == 0) {
-				return "";
-			}
-			System.out.println("#. " + naam + "              (" + getScoresOpgeteld() + "+" + getBonussenOpgeteld()
-					+ "=)" + getTotaleScore() + ":fish:" + " inzet volgende week: " + 0 + ":1pomodorog:");
-			return "\n" + num + ". " + " **" + puntentotaal + "** " + naam + get_spaces(naam, getPromiseGehaald()) + "("
-					+ basisvoorheen + "+" + basisdezeweek + ") = " + basistotaal + " " + basisemoji + "  &  ("
-					+ bonusvoorheen + "+" + bonusdezeweek + ") = " + bonustotaal + " " + bonusemoji + "   Inzet: "
-					+ inzet;
 
+		int puntentotaal = getTotaleScore();
+		int inzet = doelen.isEmpty() ? 0 : doelen.get(doelen.size() - 1);
+
+		if (puntentotaal == 0 && inzet == 0) {
+			return "";
 		}
+
+		int bonustotaal = getBonussenOpgeteld();
+		int bonusdezeweek = bonussen.isEmpty() ? 0 : bonussen.get(bonussen.size() - 1);
+		int bonusvoorheen = bonustotaal - bonusdezeweek;
+
+		int basistotaal = getScoresOpgeteld();
+		int basisdezeweek = scores.isEmpty() ? 0 : (int) Math.round(scores.get(scores.size() - 1));
+		int basisvoorheen = basistotaal - basisdezeweek;
+
+		String basisemoji = ":fish:";
+		String bonusemoji = ":one:";
+
+		// Create manually padded name field
+		String rewardEmoji = getPromiseGehaald();
+		String nameWithEmoji = rewardEmoji + " **" + puntentotaal + "** " + naam;
+		String paddedName = getPaddedName(nameWithEmoji);
+
+		String basisPuntenString;
+		String bonusPuntenString;
+		String inzetString;
+
+		if (doelen.size() > 1) { // Has history
+			basisPuntenString = "(" + basisvoorheen + "+" + basisdezeweek + ") = **" + basistotaal + "** " + basisemoji;
+			bonusPuntenString = " & (" + bonusvoorheen + "+" + bonusdezeweek + ") = **" + bonustotaal + "** "
+					+ bonusemoji;
+			inzetString = "      Inzet: " + inzet;
+		} else { // First week
+			basisPuntenString = "(" + basisvoorheen + "+" + basisdezeweek + ") = " + basistotaal + " " + basisemoji;
+			bonusPuntenString = "  &  (" + bonusvoorheen + "+" + bonusdezeweek + ") = " + bonustotaal + " "
+					+ bonusemoji;
+			inzetString = "   Inzet: " + inzet;
+		}
+
+		return "\n" + num + ". " + paddedName + basisPuntenString + bonusPuntenString + inzetString;
+	}
+
+	private String getPaddedName(String nameWithEmoji) {
+		// Calculate visual width accounting for emojis and markdown
+		String cleanName = nameWithEmoji.replaceAll("\\*\\*", ""); // Remove markdown
+		
+		// Check if there's a reward emoji from getPromiseGehaald
+		int emojiCount = getPromiseGehaald().isEmpty() ? 0 : 1;
+		
+		// Calculate effective visual width: text chars + (emojis * 5)
+		int visualWidth = cleanName.length() + (emojiCount * 2);
+		
+		// Inversely proportional padding - shorter names get MORE padding
+		int basePadding = 10; // Reduced base padding
+		int extraPadding = (int) Math.max(0, 40 - Math.pow(visualWidth, 1.2)); // Extra padding inversely related to length
+		int spacesNeeded = basePadding + extraPadding;
+		
+		return nameWithEmoji + " ".repeat(spacesNeeded);
+	}
+
+	private String getPadding(String prefix) {
+		// Remove markdown formatting for length calculation
+		String cleanPrefix = prefix.replaceAll("\\*\\*", "");
+		
+		// Account for emojis taking more visual space
+		int emojiCount = getPromiseGehaald().length() > 0 ? 1 : 0;
+		int adjustedLength = cleanPrefix.length() + (emojiCount * 4); // emojis are roughly 2 chars wide visually
+		
+		int targetWidth = 45; // increased target width
+		int numSpaces = targetWidth - adjustedLength;
+		if (numSpaces < 1) {
+			numSpaces = 1;
+		}
+		return String.join("", Collections.nCopies(numSpaces, " "));
 	}
 
 	private String checkForChars(String naam2) {
@@ -144,20 +178,6 @@ public class Persoon implements Comparable<Persoon> {
 		}
 
 		return naam2;
-	}
-
-	private String get_spaces(String naam2, String string) {
-		String spaces = "";
-		int length = 30 - naam2.length();
-		if (string.length() > 0) {
-			length = length - 3;
-		}
-		while (length > 0) {
-			spaces = spaces + " ";
-			length--;
-		}
-
-		return spaces;
 	}
 
 	private String getPromiseGehaald() {
