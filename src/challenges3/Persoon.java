@@ -6,13 +6,13 @@ import java.util.Random;
 
 import challenges3.Process.EmojiType;
 
-public class Persoon implements Comparable<Persoon>{
+public class Persoon implements Comparable<Persoon> {
 	private String naam = "";
 	private double score = 0;
 	private int doel;
 	private int bonus;
 	private int week;
-	private int huidige_week=0;
+	private int huidige_week = 0;
 	private double percentage = 0;
 	private ArrayList<Double> scores = new ArrayList<>();
 	private ArrayList<Integer> doelen = new ArrayList<>();
@@ -21,7 +21,6 @@ public class Persoon implements Comparable<Persoon>{
 	private int vakantieweek = 0;
 	private int promise = 0;
 
-	
 	private void printData() {
 		System.out.println(" naam = " + naam);
 		System.out.println(" score = " + score);
@@ -31,7 +30,7 @@ public class Persoon implements Comparable<Persoon>{
 		System.out.println(" huidige_week = " + huidige_week);
 		System.out.println(" percentage = " + percentage);
 	}
-	
+
 	public Persoon(String huidigPersoon, int doel, int week, int vakantieweek) {
 		naam = huidigPersoon;
 		this.doel = doel;
@@ -39,7 +38,7 @@ public class Persoon implements Comparable<Persoon>{
 		this.vakantieweek = vakantieweek;
 		System.out.println(" Persoon aangemaakt: naam= " + huidigPersoon + " doel= " + doel + " week= " + week);
 	}
-	
+
 	public void add(int aantal) {
 		score = score + aantal;
 	}
@@ -50,123 +49,132 @@ public class Persoon implements Comparable<Persoon>{
 
 	public double getScore() {
 		if (doel > 0) {
-			if (week >= vakantieweek && vakantieweek >0) {
-				return ((doel*(huidige_week-week))-score)/doel;
-				
+			if (week >= vakantieweek && vakantieweek > 0) {
+				return ((doel * (huidige_week - week)) - score) / doel;
+
 			} else {
-			return ((doel*(huidige_week-week+1))-score)/doel;
+				return ((doel * (huidige_week - week + 1)) - score) / doel;
 			}
 		} else {
 			return 0;
 		}
 	}
-	
+
 	public double getPercentage() {
 		return percentage;
 	}
 
 	@Override
 	public int compareTo(Persoon o) {
-		System.out.println("persoon " + this.getNaam() + " heeft score: " + this.getTotaleScore() + " en persoon " + o.getNaam() + " heeft " + o.getTotaleScore());
-			return o.getTotaleScore() - this.getTotaleScore();
-		
+		System.out.println("persoon " + this.getNaam() + " heeft score: " + this.getTotaleScore() + " en persoon "
+				+ o.getNaam() + " heeft " + o.getTotaleScore());
+		return o.getTotaleScore() - this.getTotaleScore();
+
 	}
 
 	private int getTotal() {
 		return (int) Variance.getSom(scores);
 	}
-	
+
 	public String getPoms(int num) {
 
-		if (naam.equals("")) { return null; }
+		if (naam.equals("")) {
+			return null;
+		}
 		int puntentotaal = getTotaleScore();
 		int bonustotaal = getBonussenOpgeteld();
-		int bonusdezeweek = bonussen.get(bonussen.size()-1);
-		int bonusvoorheen = bonustotaal-bonusdezeweek;
+		int bonusdezeweek = bonussen.get(bonussen.size() - 1);
+		int bonusvoorheen = bonustotaal - bonusdezeweek;
 		int basistotaal = getScoresOpgeteld();
-		int basisdezeweek = (int) Math.round(scores.get(scores.size()-1));
-		int basisvoorheen = (int) (basistotaal-basisdezeweek);
-		String basisemoji = ":cloud_tornado:";
-		int inzet = doelen.get(doelen.size()-1);
-		String bonusemoji = ":wind_blowing_face:";
-		if (doelen.size() >0) {
-			if (puntentotaal == 0 && inzet ==0) {
+		int basisdezeweek = (int) Math.round(scores.get(scores.size() - 1));
+		int basisvoorheen = (int) (basistotaal - basisdezeweek);
+		String basisemoji = ":fish:";
+		int inzet = doelen.get(doelen.size() - 1);
+		String bonusemoji = ":one:";
+		if (doelen.size() > 0) {
+			if (puntentotaal == 0 && inzet == 0) {
 				return "";
 			}
-			// nieuwe format: <bonusemoji> <puntentotaal> <Naam>         (<basispunten hiervoor>+basispunten deze week>)=totaal basispunten <emoji>  & (0 + 17)=17 bonuspunten   inzet: 20 :1pomodorog:
-			System.out.println("#. " + getPromiseGehaald() + naam + get_spaces(naam, getPromiseGehaald()) + "(" + (getScoresOpgeteld()) +"+"+ getBonussenOpgeteld() +"=)"+getTotaleScore()+":sunny:" + " inzet volgende week: " + doelen.get(doelen.size()-1)+":1pomodorog:");
-			return "\n" + num + ". " + getPromiseGehaald() + " " + puntentotaal + " " + naam + get_spaces(naam, getPromiseGehaald()) + "(" + basisvoorheen + "+" + basisdezeweek + ")=" + basistotaal + basisemoji +" & ("+ bonusvoorheen + "+" + bonusdezeweek +")=" + bonustotaal+ bonusemoji + " inzet:" + inzet ; 
-			//return "\n" + num + ". " + getPromiseGehaald() + checkForChars(naam) + get_spaces(naam, "")+"(" + getScoresOpgeteld() +"+"+ getBonussenOpgeteld() +"=)"+getTotaleScore()+":sunny:" + " inzet volgende week: " + doelen.get(doelen.size()-1)+":1pomodorog:";
+			// nieuwe format: <bonusemoji> <puntentotaal> <Naam> (<basispunten
+			// hiervoor>+basispunten deze week>)=totaal basispunten <emoji> & (0 + 17)=17
+			// bonuspunten inzet: 20 :1pomodorog:
+			System.out.println("#. " + getPromiseGehaald() + naam + get_spaces(naam, getPromiseGehaald()) + "("
+					+ (getScoresOpgeteld()) + "+" + getBonussenOpgeteld() + "=)" + getTotaleScore() + ":fish:"
+					+ " inzet volgende week: " + doelen.get(doelen.size() - 1) + ":1pomodorog:");
+			return "\n" + num + ". " + getPromiseGehaald() + " **" + puntentotaal + "** " + naam
+					+ get_spaces(naam, getPromiseGehaald()) + "(" + basisvoorheen + "+" + basisdezeweek + ") = **"
+					+ basistotaal + "** " + basisemoji + " & (" + bonusvoorheen + "+" + bonusdezeweek + ") = **"
+					+ bonustotaal + "** " + bonusemoji + "      Inzet: " + inzet;
+			// return "\n" + num + ". " + getPromiseGehaald() + checkForChars(naam) +
+			// get_spaces(naam, "")+"(" + getScoresOpgeteld() +"+"+ getBonussenOpgeteld()
+			// +"=)"+getTotaleScore()+":sunny:" + " inzet volgende week: " +
+			// doelen.get(doelen.size()-1)+":1pomodorog:";
 		} else {
 			if (puntentotaal == 0) {
 				return "";
 			}
-			System.out.println("#. " + naam + "              (" + getScoresOpgeteld() +"+"+ getBonussenOpgeteld() +"=)"+getTotaleScore()+":sunny:" + " inzet volgende week: " + 0 +":1pomodorog:");
-			return "\n" + num + ". " + " " + puntentotaal + " " + naam + get_spaces(naam, getPromiseGehaald()) + "(" + basisvoorheen + "+" + basisdezeweek + ")=" + basistotaal + basisemoji +" & ("+ bonusvoorheen + "+" + bonusdezeweek +")=" + bonustotaal+ bonusemoji + " inzet:" + inzet ; 
-			
+			System.out.println("#. " + naam + "              (" + getScoresOpgeteld() + "+" + getBonussenOpgeteld()
+					+ "=)" + getTotaleScore() + ":fish:" + " inzet volgende week: " + 0 + ":1pomodorog:");
+			return "\n" + num + ". " + " **" + puntentotaal + "** " + naam + get_spaces(naam, getPromiseGehaald()) + "("
+					+ basisvoorheen + "+" + basisdezeweek + ") = " + basistotaal + " " + basisemoji + "  &  ("
+					+ bonusvoorheen + "+" + bonusdezeweek + ") = " + bonustotaal + " " + bonusemoji + "   Inzet: "
+					+ inzet;
+
 		}
 	}
+
 	private String checkForChars(String naam2) {
-	    // Define special characters that need to be escaped
-	    String specialChars = "_*";
-	    
-	    // Use a regular expression to replace each special character with an escaped version
-	    for (char c : specialChars.toCharArray()) {
-	        naam2 = naam2.replace(Character.toString(c), "\\" + c);
-	    }
-	    
-	    return naam2;
+		// Define special characters that need to be escaped
+		String specialChars = "_*";
+
+		// Use a regular expression to replace each special character with an escaped
+		// version
+		for (char c : specialChars.toCharArray()) {
+			naam2 = naam2.replace(Character.toString(c), "\\" + c);
+		}
+
+		return naam2;
 	}
 
 	private String get_spaces(String naam2, String string) {
 		String spaces = "";
-		int length = 30-naam2.length();
-		if (string.length()>0) {
-			length = length-3;
+		int length = 30 - naam2.length();
+		if (string.length() > 0) {
+			length = length - 3;
 		}
 		while (length > 0) {
 			spaces = spaces + " ";
 			length--;
 		}
-		
+
 		return spaces;
 	}
 
 	private String getPromiseGehaald() {
-		//System.out.println(naam + "   doelen  " + doelen);
-		//System.out.println(naam + "   scores   " + scores);
-		//System.out.println(""+ doelen.size() + "" + doelen.get(doelen.size()-1)  + "" + scores.get(scores.size()-1) );
-		if (doelen.size() > 1 && doelen.get(doelen.size()-2) > 0 && scores.get(scores.size()-1) >= doelen.get(doelen.size()-2)) {
-			//System.out.println(naam + "   doel = " + doel + " score = " + score);
-	        // Array of bird emojis
-	        String[] birds = {
-	            ":sunny:", ":beach:", ":shell:", ":sunflower:", ":coconut:", ":palm_tree:"
-	        };
+		if (doelen.size() > 1 && doelen.get(doelen.size() - 2) > 0
+				&& scores.get(scores.size() - 1) >= doelen.get(doelen.size() - 2)) {
+			String[] promiseSuccessEmojis = { "🦑", "🐚", "🪸", "🦞" };
 
-	        // Create an instance of Random
-	        Random random = new Random();
+			int index = new Random().nextInt(promiseSuccessEmojis.length);
 
-	        // Select a random index from the array
-	        int index = random.nextInt(birds.length);
-	        
-	        return birds[index];
+			return promiseSuccessEmojis[index];
 		}
 		return "";
 	}
 
 	public void add(Emoji emoji, int aantal) {
-		if (emoji.getType()== EmojiType.BONUS) {
-			bonus = bonus + emoji.getPoints()*aantal;
-		} else if (emoji.getType()== EmojiType.DONE) {
-			score = score + emoji.getPoints()*aantal;
-		} else if (emoji.getType()== EmojiType.PROMISE) {
-			doel = doel + emoji.getPoints()*aantal;
+		if (emoji.getType() == EmojiType.BONUS) {
+			bonus = bonus + emoji.getPoints() * aantal;
+		} else if (emoji.getType() == EmojiType.DONE) {
+			score = score + emoji.getPoints() * aantal;
+		} else if (emoji.getType() == EmojiType.PROMISE) {
+			doel = doel + emoji.getPoints() * aantal;
 		} else {
 			System.out.println(" Deze emoji had geen goed type!");
 		}
-		
+
 	}
-	
+
 	public void nieuweWeek() {
 		doelen.add(doel);
 		scores.add(score);
@@ -175,23 +183,23 @@ public class Persoon implements Comparable<Persoon>{
 		score = 0;
 		bonus = 0;
 	}
-	
+
 	public int getScoresOpgeteld() {
-		int sum =0;
+		int sum = 0;
 		for (Double score : scores) {
-		    sum += score;
+			sum += score;
 		}
 		return Math.round(sum);
 	}
-	
+
 	public int getBonussenOpgeteld() {
-		int sum =0;
+		int sum = 0;
 		for (int bonus : bonussen) {
-		    sum += bonus;
+			sum += bonus;
 		}
 		return sum;
 	}
-	
+
 	public int getTotaleScore() {
 		return getScoresOpgeteld() + getBonussenOpgeteld();
 	}

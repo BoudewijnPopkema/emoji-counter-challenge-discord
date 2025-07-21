@@ -107,8 +107,12 @@ public class Process {
 		int weeknumber = 0;
 		for (BufferedReader br_week:br) {
 			result = "";
+			String onelineAgo = "";
+			String twolinesAgo = "";
 			while ((ss=br_week.readLine()) != null) {
-				read(ss + ",");
+				read(ss + ",", onelineAgo, twolinesAgo);
+				onelineAgo = ss;
+				twolinesAgo = onelineAgo;
 			}
 
 			// personen sorteren
@@ -117,7 +121,7 @@ public class Process {
 			}
 			Collections.sort(personen);
 			System.out.println(" score-bord: ");
-			result = result + "score-bord week " + weeknumber;
+			result = result + "## Scorebord week " + weeknumber;
 			int num = 1;
 			for (Persoon p : personen) {
 				result = result + p.getPoms(num);
@@ -129,9 +133,12 @@ public class Process {
 	}
 
 
-	private void read(String ss) {
+	private void read(String ss, String oneLineAgo, String twoLinesago) {
 		if (ss.contains(separator)) { //  —
 			huidigPersoon = ss.substring(0, ss.indexOf(" — "));
+			if (huidigPersoon.equals(twoLinesago) && oneLineAgo.startsWith("[") && oneLineAgo.endsWith("]")) { // voor mensen met server tags, dat wordt raar geformatteerd
+				huidigPersoon = twoLinesago;
+			}
 		} else {
 			addPoints(ss);
 		}

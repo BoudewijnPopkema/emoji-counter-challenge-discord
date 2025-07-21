@@ -9,10 +9,10 @@ import java.util.ArrayList;
 
 public class reader {
 	// Change this string to the amount of weeks
-	static int amount_of_weeks = 12;
+	static int amount_of_weeks = 11;
 	
 	// Change this string to the folderLocation all the txt files are in.
-	static String folderLocation = "C:\\Users\\anjac\\OneDrive\\Desktop\\challenges\\2024q5\\";
+	static String folderLocation = "D:\\OU\\emoji-challenge-q4\\";
 
 	//static String LocatieBepaling = folderLocation+"Bepaling.txt"; // txt file met hoeveel pannekoeken iedereen doet en vanaf welke week ze mee doen
 
