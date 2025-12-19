@@ -113,8 +113,8 @@ public class Process {
 			String twolinesAgo = "";
 			while ((ss=br_week.readLine()) != null) {
 				read(ss + ",", onelineAgo, twolinesAgo);
-				onelineAgo = ss;
 				twolinesAgo = onelineAgo;
+				onelineAgo = ss;
 			}
 
 			// personen sorteren
@@ -138,7 +138,7 @@ public class Process {
 	private void read(String ss, String oneLineAgo, String twoLinesago) {
 		if (ss.contains(separator)) { //  —
 			huidigPersoon = ss.substring(0, ss.indexOf(" — "));
-			if (huidigPersoon.equals(twoLinesago) && oneLineAgo.startsWith("[") && oneLineAgo.endsWith("]")) { // voor mensen met server tags, dat wordt raar geformatteerd
+			if (huidigPersoon.equals("") && oneLineAgo.equals("")) { // voor mensen met server tags, dat wordt raar geformatteerd
 				huidigPersoon = twoLinesago;
 			}
 		} else {
